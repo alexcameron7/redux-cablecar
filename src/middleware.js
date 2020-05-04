@@ -1,6 +1,5 @@
 import CableCar from './cableCar';
 import CableCarDispatcher from './cableCarDispatcher';
-import CableCarSubsidiary from './cableCarSubsidiary';
 
 let cableProvider;
 
@@ -74,12 +73,6 @@ middleware.connect = (store, channel, options) => {
 
 middleware.setProvider = (newProvider) => {
   cableProvider = newProvider;
-}
-
-middleware.addSubsidiaryCar = (channelSubsidiaryTo, id, store) => {
-  const car = dispatcher.getCar(channelSubsidiaryTo)
-  let subsidiaryCar = new CableCarSubsidiary(id, store, car.channel, car.options);
-  dispatcher.addCar(id, subsidiaryCar);
 }
 
 export default middleware;
