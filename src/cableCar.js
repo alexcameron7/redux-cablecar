@@ -9,6 +9,12 @@ export default class CableCar {
     if (typeof store === 'undefined' || typeof store.dispatch === 'undefined') {
       throw new Error(`CableCar: unknown store: ${store}`);
     }
+    
+    options.subsidiaryStores && Object.values(options.subsidiaryStores).forEach(store => {
+      if (typeof store === 'undefined' || typeof store.dispatch === 'undefined') {
+        throw new Error(`CableCar: unknown store: ${store}`);
+      }
+    });
 
     if (typeof channel !== 'string') {
       throw new Error(`CableCar: unknown channel: ${channel}`);
@@ -24,6 +30,7 @@ export default class CableCar {
   initialize(channel, options) {
 
     this.channel = channel;
+    {this.subsidiaryStores, ...options} = options
     this.options = options;
     this.running = false;
 
@@ -67,7 +74,14 @@ export default class CableCar {
       channel: this.channel,
       CableCar__Action: true,
     });
-    this.store.dispatch(newAction);
+    
+    let store = this.store
+    
+    if (action.subsidiaryStoreId) {
+      store = this.subsidiaryStores[action.subsidiaryStoreId]
+    }
+    
+    store.dispatch(newAction);
   }
 
   allows(action) {
