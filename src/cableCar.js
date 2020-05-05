@@ -30,7 +30,6 @@ export default class CableCar {
   initialize(channel, options) {
 
     this.channel = channel;
-    {this.subsidiaryStores, ...options} = options
     this.options = options;
     this.running = false;
 
@@ -78,7 +77,7 @@ export default class CableCar {
     let store = this.store
     
     if (action.subsidiaryStoreId) {
-      store = this.subsidiaryStores[action.subsidiaryStoreId]
+      store = this.options.subsidiaryStores[action.subsidiaryStoreId]
     }
     
     store.dispatch(newAction);
